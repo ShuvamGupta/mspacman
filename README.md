@@ -12,7 +12,7 @@ Install directly from GitLab using pip:
 pip install git+https://gitlab.com/ShuvamGupta1/mspacman.git
 
 ## Example usage
-See example_usage.py file
+Refer mspacman.core_example_usage.py file
 
 ## Citation
 
