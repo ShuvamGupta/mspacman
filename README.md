@@ -1,4 +1,4 @@
-# MSPaCMAn: Microstructure and Segmentation-based Particle and Composition Analysis
+# MSPaCMAn: Mounted Single Particle Compositional and Mineralogical Analyses
 
 **MSPaCMAn** is a Python toolkit for analyzing 3D micro-CT images of particles.  
 It supports property extraction, greyscale histogram analysis, peak detection, and multi-phase quantification — 
