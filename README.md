@@ -2,7 +2,7 @@
 
 **MSPaCMAn** is a Python toolkit for analyzing 3D micro-CT images of particles.  
 It supports property extraction, greyscale histogram analysis, peak detection, and multi-phase quantification — 
-considering partial volume blur for advanced mineral processing research.
+considering partial volume blur for advanced CT analyses.
 
 
 ## Installation
