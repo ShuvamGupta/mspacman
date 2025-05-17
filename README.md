@@ -23,3 +23,4 @@ Tomography of Materials and Structures, 7, 100050. https://doi.org/10.1016/j.tma
 
 You may also cite this GitLab repository as a secondary reference:
 Gupta, S. (2025). *MSPaCMAn* [Python Package]. GitLab. https://gitlab.com/ShuvamGupta1/mspacman
+Developed while affiliated with Helmholtz Institute Freiberg for Resource Technology, Germany.
