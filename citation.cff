@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the following paper and optionally this repository."
+title: "MSPaCMAn"
+authors:
+  - family-names: Gupta
+    given-names: Shuvam
+    affiliation: Helmholtz Institute Freiberg for Resource Technology (HIF), Germany
+
+date-released: 2025-05-17
+version: 0.1.0
+repository-code: https://gitlab.com/ShuvamGupta1/mspacman
+preferred-citation:
+  type: article
+  title: "3D mineral quantification of particulate materials with rare earth mineral inclusions: Achieving sub-voxel resolution by considering the partial volume and blurring effect"
+  authors:
+    - family-names: Gupta
+      given-names: Shuvam
+    - family-names: Moutinho
+      given-names: V.
+    - family-names: Godinho
+      given-names: J. R.
+    - family-names: Guy
+      given-names: B. M.
+    - family-names: Gutzmer
+      given-names: J.
+  journal: "Tomography of Materials and Structures"
+  year: 2025
+  volume: "7"
+  doi: 10.1016/j.tmater.2025.100050
