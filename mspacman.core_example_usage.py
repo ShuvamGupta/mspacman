@@ -578,7 +578,7 @@ print (Liberated_quantification)
 
 
 # Concate nates all in single dataframe
-Quantification = mspacman.core.Conactenate(Liberated_quantification, Binary_quantification,Ternary_quantification,
+Quantification = mspacman.core.Concatenate(Liberated_quantification, Binary_quantification,Ternary_quantification,
                              Quaternary_quantification,Quinary_quantification)
 
 """
