@@ -14,6 +14,12 @@ pip install git+https://gitlab.com/ShuvamGupta1/mspacman.git
 ## Example usage
 Refer mspacman.core_example_usage.py file
 
+## Acknowledge
+This project utilizes several open-source Python libraries including NumPy, SciPy, Pandas, Matplotlib, 
+Napari, tifffile, scikit-image, joblib, anndata, tqdm, pykuwahara, and standard Python libraries 
+(os, glob, re, and gc). We gratefully acknowledge the developers and communities of these tools 
+for enabling efficient scientific computing, visualization, image processing, and data analysis.
+
 ## Citation
 
 If you use this repository or the method/code provided, please cite the following paper:
