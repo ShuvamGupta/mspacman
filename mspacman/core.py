@@ -1730,6 +1730,7 @@ def bias_dense_minerals(Peak_data, Properties_Bulk, phases_to_correct=None):
         raise ValueError("No threshold columns found in Peaks. Expected columns containing 'threshold' in the name.")
     threshold_cols_sorted = sorted(threshold_cols, key=lambda x: int(re.search(r'\d+', x).group()))
     threshold_values = [Peak_data[col].max() for col in threshold_cols_sorted]
+    threshold_values.append(float('inf'))
     thresholds = list(zip(threshold_values[:-1], threshold_values[1:]))
 
     # Convert user-friendly input like [2, 4] into actual column names
