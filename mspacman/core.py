@@ -1617,7 +1617,7 @@ def find_peaks_and_arrange(
         'Phase_4_threshold': Phase_4_threshold,
         'Phase_5_threshold': Phase_5_threshold,
         'Phase_6_threshold': Phase_6_threshold,
-        'Phase_7_threshold': Phase_8_threshold,
+        'Phase_7_threshold': Phase_7_threshold,
         'Phase_8_threshold': Phase_8_threshold,
         'Phase_9_threshold': Phase_9_threshold,
         'Phase_10_threshold': Phase_10_threshold,
