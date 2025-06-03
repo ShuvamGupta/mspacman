@@ -1450,7 +1450,7 @@ def find_peaks_and_arrange(
     """
     from scipy.signal import find_peaks
     # Define up to 7 phase thresholds. Fill missing ones with 65536 (max greyscale).
-    phase_keys = ['Phase_1', 'Phase_2', 'Phase_3', 'Phase_4', 'Phase_5', 'Phase_6', 'Phase_7']
+    phase_keys = ['Phase_1', 'Phase_2', 'Phase_3', 'Phase_4', 'Phase_5', 'Phase_6', 'Phase_7', 'Phase_8', 'Phase_9', 'Phase_10', 'Phase_11']
     if len(thresholds) < 1:
         raise ValueError("At least Phase_1 threshold must be provided.")
 
@@ -1462,6 +1462,10 @@ def find_peaks_and_arrange(
     Phase_5_threshold = thresholds_dict['Phase_5']
     Phase_6_threshold = thresholds_dict['Phase_6']
     Phase_7_threshold = thresholds_dict['Phase_7']
+    Phase_8_threshold = thresholds_dict['Phase_8']
+    Phase_9_threshold = thresholds_dict['Phase_9']
+    Phase_10_threshold = thresholds_dict['Phase_10']
+    Phase_11_threshold = thresholds_dict['Phase_11']
 
     # Process Peaks
     Peaks_Position = []
@@ -1563,7 +1567,11 @@ def find_peaks_and_arrange(
         (Phase_4_threshold, Phase_5_threshold),
         (Phase_5_threshold, Phase_6_threshold),
         (Phase_6_threshold, Phase_7_threshold),
-        (Phase_7_threshold, 65536),
+        (Phase_7_threshold, Phase_8_threshold),
+        (Phase_8_threshold, Phase_9_threshold),
+        (Phase_9_threshold, Phase_10_threshold),
+        (Phase_10_threshold, Phase_11_threshold),
+        (Phase_11_threshold, 65536),
     ]
 
     all_peaks_data = [
@@ -1607,7 +1615,11 @@ def find_peaks_and_arrange(
         'Phase_4_threshold': Phase_4_threshold,
         'Phase_5_threshold': Phase_5_threshold,
         'Phase_6_threshold': Phase_6_threshold,
-        'Phase_7_threshold': Phase_7_threshold
+        'Phase_7_threshold': Phase_8_threshold,
+        'Phase_8_threshold': Phase_8_threshold,
+        'Phase_9_threshold': Phase_9_threshold,
+        'Phase_10_threshold': Phase_10_threshold,
+        'Phase_11_threshold': Phase_11_threshold
 
     }
     
