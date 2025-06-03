@@ -1449,7 +1449,7 @@ def find_peaks_and_arrange(
         along with the threshold values used for classification.
     """
     from scipy.signal import find_peaks
-    # Define up to 7 phase thresholds. Fill missing ones with 65536 (max greyscale).
+    # Define up to 11 phase thresholds. Fill missing ones with 65536 (max greyscale).
     phase_keys = ['Phase_1', 'Phase_2', 'Phase_3', 'Phase_4', 'Phase_5', 'Phase_6', 'Phase_7', 'Phase_8', 'Phase_9', 'Phase_10', 'Phase_11']
     if len(thresholds) < 1:
         raise ValueError("At least Phase_1 threshold must be provided.")
@@ -1878,8 +1878,8 @@ def extract_peaks_and_thresholds(Peaks):
     if phase_thresholds[-1] < 65535:
         phase_thresholds.append(65535)
 
-    # Pad up to Phase 6 (or 5 thresholds + background)
-    while len(phase_thresholds) <= 9:
+    # Pad up to Phase 12 (or 11 thresholds + background)
+    while len(phase_thresholds) <= 12:
         phase_thresholds.append(float('inf'))
     
 
