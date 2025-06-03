@@ -1511,6 +1511,10 @@ def find_peaks_and_arrange(
     Peaks1 = Peaks.copy()
     cols = [f"Peak_position_{i}" for i in range(1, 23)]
     peaks_height_cols = [f"Peak_height_{i}" for i in range(1, 23)]
+
+    mask = (Peaks1[cols] <= Background_peak).all(axis=1)
+    Peaks1.loc[mask, cols[0]] = Background_peak + 10
+    Peaks1.loc[mask, peaks_height_cols[0]] = 1
     
     # Helper function to extract the best peak within a given phase threshold range
     def process_phase(Peaks, phase_start, phase_end, phase_label):
