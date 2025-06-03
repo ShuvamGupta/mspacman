@@ -1973,7 +1973,7 @@ def Liberated_Particles(Peaks, Bulk_histograms, Surface_mesh_histogram):
     ]
 
     Quantification_1_phase_sorted.index = df_index['Label']
-    cols = ['Peak_1', 'Peak_2', 'Peak_3', 'Peak_4', 'Peak_5', 'Peak_6', 'Peak_7', 'Peak_8', 'Peak_9']
+    cols = ['Peak_1', 'Peak_2', 'Peak_3', 'Peak_4', 'Peak_5', 'Peak_6', 'Peak_7', 'Peak_8', 'Peak_9', 'Peak_10', 'Peak_11', 'Peak_12']
     Quantification_1_phase_sorted[cols] = Quantification_1_phase_sorted[cols].replace(0, Background_peak_pos)
     return Quantification_1_phase_sorted
     
@@ -2136,7 +2136,7 @@ def Binary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_volu
         temp_sorted[f'Phase_{i}_outer_quantification'] = np.where(mask2, Quantification_2_phases['Quantification_Outer_phase_2'], 0)
 
     Quantification_2_phase_sorted = Quantification_2_phase_sorted.mask(Quantification_2_phase_sorted == 0, temp_sorted)
-    cols = ['Peak_1', 'Peak_2', 'Peak_3', 'Peak_4', 'Peak_5', 'Peak_6', 'Peak_7', 'Peak_8', 'Peak_9']
+    cols = ['Peak_1', 'Peak_2', 'Peak_3', 'Peak_4', 'Peak_5', 'Peak_6', 'Peak_7', 'Peak_8', 'Peak_9', 'Peak_10', 'Peak_11', 'Peak_12']
     Quantification_2_phase_sorted[cols] = Quantification_2_phase_sorted[cols].replace(0, Background_peak_pos)
 
     return Quantification_2_phase_sorted
@@ -2320,7 +2320,7 @@ def Ternary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_vol
     Quantification_3_phases = pd.concat([Index_3_phase,Quantification_all_3_phases_1,Quantification_all_3_phases_2,Quantification_all_3_phases_3,
                                          Peaks_1_phase,Peaks_2_phase,Peaks_3_phase,Quantification_Outer_phase_1,
                                          Quantification_Outer_phase_2,Quantification_Outer_phase_3],axis = 1)
-    cols = ['Peak_1', 'Peak_2', 'Peak_3', 'Peak_4', 'Peak_5', 'Peak_6', 'Peak_7', 'Peak_8', 'Peak_9']
+    cols = ['Peak_1', 'Peak_2', 'Peak_3', 'Peak_4', 'Peak_5', 'Peak_6', 'Peak_7', 'Peak_8', 'Peak_9', 'Peak_10', 'Peak_11', 'Peak_12']
 
     thresholds = phase_thresholds
     Quantification_3_phase_sorted = pd.DataFrame(columns= cols + [f'Phase_{i}_quantification' for i in range(1, 6)])
@@ -2556,7 +2556,7 @@ def Quaternary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_
                                          Quantification_all_4_phases_4, Peaks_1_phase,Peaks_2_phase,Peaks_3_phase,Peaks_4_phase,
                                          Quantification_Outer_phase_1,Quantification_Outer_phase_2,
                                          Quantification_Outer_phase_3,Quantification_Outer_phase_4],axis = 1)
-    cols = ['Peak_1', 'Peak_2', 'Peak_3', 'Peak_4', 'Peak_5', 'Peak_6', 'Peak_7', 'Peak_8', 'Peak_9']
+    cols = ['Peak_1', 'Peak_2', 'Peak_3', 'Peak_4', 'Peak_5', 'Peak_6', 'Peak_7', 'Peak_8', 'Peak_9', 'Peak_10', 'Peak_11', 'Peak_12']
 
     thresholds = phase_thresholds
     
@@ -2821,7 +2821,7 @@ def Quinary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_vol
                                          Peaks_4_phase,Peaks_5_phase,Quantification_Outer_phase_1,Quantification_Outer_phase_2,
                                          Quantification_Outer_phase_3,Quantification_Outer_phase_4,Quantification_Outer_phase_5],axis = 1)
 
-    cols = ['Peak_1', 'Peak_2', 'Peak_3', 'Peak_4', 'Peak_5', 'Peak_6', 'Peak_7', 'Peak_8', 'Peak_9']
+    cols = ['Peak_1', 'Peak_2', 'Peak_3', 'Peak_4', 'Peak_5', 'Peak_6', 'Peak_7', 'Peak_8', 'Peak_9', 'Peak_10', 'Peak_11', 'Peak_12']
 
     thresholds = phase_thresholds
 
