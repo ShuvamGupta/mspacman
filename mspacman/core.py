@@ -2929,7 +2929,7 @@ def calculate_bootstrapping_error_bulk(dataset, fractions):
     """
     import numpy as np
     # Define the phase column names
-    phase_cols = [f'Phase_{i}_quantification' for i in range(1, 10)]
+    phase_cols = [f'Phase_{i}_quantification' for i in range(1, 12)]
 
     # Resample the dataset
     resampled_dataset = dataset.sample(frac=fractions, replace=True, random_state=42).copy()
@@ -2951,7 +2951,7 @@ def calculate_bootstrapping_error_bulk(dataset, fractions):
 
     # Calculate percentiles and actual values
     bootstrapping_error = {
-        'Class': [f'Class {i}' for i in range(1, 10)],
+        'Class': [f'Class {i}' for i in range(1, 12)],
         'Max': [round(np.percentile(phase_means[col], 97.5), 2) for col in phase_cols],
         'Min': [round(np.percentile(phase_means[col], 2.5), 2) for col in phase_cols],
         'Actual_Percentage': [round(dataset[col].sum() * 100 / dataset[phase_cols].sum().sum(), 2) for col in phase_cols]
@@ -2985,7 +2985,7 @@ def calculate_bootstrapping_error_surface(dataset, fraction):
             - Actual_Percentage: Actual percentage from the input dataset.
     """
     import numpy as np
-    phase_cols = [f'Phase_{i}_surface_quantification' for i in range(1, 10)]
+    phase_cols = [f'Phase_{i}_surface_quantification' for i in range(1, 12)]
 
     resampled_dataset = dataset.sample(frac=fraction, replace=True, random_state=42).copy()
     resampled_dataset['Sum'] = resampled_dataset[phase_cols].sum(axis=1)
@@ -2999,7 +2999,7 @@ def calculate_bootstrapping_error_surface(dataset, fraction):
             phase_means[col].append(mean_val)
 
     bootstrapping_error = {
-        'Class': [f'Class {i}' for i in range(1, 10)],
+        'Class': [f'Class {i}' for i in range(1, 12)],
         'Max': [round(np.percentile(phase_means[col], 97.5), 2) for col in phase_cols],
         'Min': [round(np.percentile(phase_means[col], 2.5), 2) for col in phase_cols],
         'Actual_Percentage': [round(dataset[col].sum() * 100 / dataset[phase_cols].sum().sum(), 2) for col in phase_cols]
