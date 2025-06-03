@@ -1271,6 +1271,8 @@ def upload_histograms_h5ad(file_path):
         else:
             df.index.name = 'Label'
 
+        df.index = df.index.astype(int)
+
         print("h5ad file uploaded and converted to DataFrame successfully.")
         return df
 
