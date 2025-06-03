@@ -1688,7 +1688,7 @@ def map_peaks_on_bulk_histograms(histograms, Peaks):
     peaks_df = pd.DataFrame(peak_results, index=Peaks.index)
 
     # Overwrite any computed peak if original peak == background
-    for i in range(1, 9):
+    for i in range(1, 12):
         peak_col = f'Peak_position_{i}'
         height_col = f'Peak_height_{i}'
         if peak_col in Peaks.columns:
