@@ -3014,3 +3014,54 @@ def calculate_bootstrapping_error_surface(dataset, fraction):
     return pd.DataFrame(bootstrapping_error)
 
 
+
+def compute_particle_quantification_percentages(df):
+    """
+    Adds 'Bulk_sum' and Phase_n_quantification (%) 
+    """
+    phase_cols = [f'Phase_{i}_quantification' for i in range(1, 13)]
+
+    df['Bulk_sum'] = df[phase_cols].sum(axis=1)
+
+    for col in phase_cols:
+        percent_col = col.replace('_quantification', '_quantification (%)')
+        df[percent_col] = (df[col]*100 / df['Bulk_sum']).fillna(0)
+        
+    df.drop(columns='Bulk_sum', inplace=True)
+
+    return df
+
+
+def compute_particle_surface_percentages(df):
+    """
+    Adds 'Surface_sum' and Phase_n_surface_quantification (%) columns
+    """
+    surface_cols = [f'Phase_{i}_surface_quantification' for i in range(1, 13)]
+
+    df['Surface_sum'] = df[surface_cols].sum(axis=1)
+
+    for col in surface_cols:
+        percent_col = col.replace('_surface_quantification', '_surface_quantification (%)')
+        df[percent_col] = (df[col] *100/ df['Surface_sum']).fillna(0)
+    
+    df.drop(columns='Surface_sum', inplace=True)
+
+    return df
+
+def compute_particle_outer_percentages(df):
+    """
+    Adds Phase_n_outer_quantification (%) columns 
+    """
+    outer_cols = [f'Phase_{i}_outer_quantification' for i in range(1, 13)]
+
+    df['Outer_sum'] = df[outer_cols].sum(axis=1)
+
+    for col in outer_cols:
+        percent_col = col.replace('_outer_quantification', '_outer_quantification (%)')
+        df[percent_col] = (df[col]*100 / df['Outer_sum']).fillna(0)
+    
+    df.drop(columns='Outer_sum', inplace=True)
+
+    return df
+
+
