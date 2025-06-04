@@ -3008,7 +3008,7 @@ def calculate_bootstrapping_error_surface(dataset, fraction):
         'Class': [f'Class {i}' for i in range(1, 12)],
         'Max': [round(np.percentile(phase_means[col], 97.5), 2) for col in phase_cols],
         'Min': [round(np.percentile(phase_means[col], 2.5), 2) for col in phase_cols],
-        'Actual_Percentage': [round(dataset[col].sum() * 100 / dataset[phase_cols].sum().sum(), 2) for col in phase_cols]
+        'Actual_Percentage': [round(dataset[col].sum() * 100 / dataset[phase_cols].sum().sum(), 5) for col in phase_cols]
     }
 
     return pd.DataFrame(bootstrapping_error)
