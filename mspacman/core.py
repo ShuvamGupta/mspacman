@@ -1711,8 +1711,8 @@ def map_peaks_on_bulk_histograms(histograms, Peaks):
                     if val_peaks != val_peaks_df:
                         Peaks.at[idx, col] = val_peaks_df
 
-    Peaks['Peak_position_1'] = np.where(Peaks['Peak_position_1'] < Background_peak + 2,
-    Background_peak + 2, Peaks['Peak_position_1'])
+    Peaks['Peak_position_1'] = np.where(Peaks['Peak_position_1'] < Background_peak_global + 2,
+    Background_peak_global + 2, Peaks['Peak_position_1'])
 
     return Peaks
 
