@@ -1632,6 +1632,9 @@ def find_peaks_and_arrange(
     # Remove infinite values (safety)
     Peaks_phases = Peaks_phases.loc[:, ~Peaks_phases.isin([np.inf, -np.inf]).any()]
     Peaks = Peaks.loc[:, ~Peaks.isin([np.inf, -np.inf]).any()]
+
+    Peaks['Peak_position_1'] = np.where(Peaks['Peak_position_1'] < Background_peak + 2,
+    Background_peak + 2, Peaks['Peak_position_1'])
     
     return Peaks_phases
 
@@ -1707,6 +1710,9 @@ def map_peaks_on_bulk_histograms(histograms, Peaks):
                     val_peaks_df = peaks_df.at[idx, col]
                     if val_peaks != val_peaks_df:
                         Peaks.at[idx, col] = val_peaks_df
+
+    Peaks['Peak_position_1'] = np.where(Peaks['Peak_position_1'] < Background_peak + 2,
+    Background_peak + 2, Peaks['Peak_position_1'])
 
     return Peaks
 
