@@ -607,6 +607,11 @@ print (Bootstrapping_error_bulk)
 Bootstrapping_error_surface = mspacman.core.calculate_bootstrapping_error_surface(Quantification,1000)
 print (Bootstrapping_error_surface)
 
+# Calculates the percentage contribution of each mineral phase within individual particles, 
+#treating each particle as 100%. Percentages are computed separately for bulk, outer, and surface quantifications.
 
+Quantification = mspacman.core.compute_particle_quantification_percentages(Quantification)
+Quantification = mspacman.core.compute_particle_surface_percentages(Quantification)
+Quantification = mspacman.core.compute_particle_outer_percentages(Quantification)
 
 
