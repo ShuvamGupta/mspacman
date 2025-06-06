@@ -2064,12 +2064,13 @@ def Binary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_volu
 
             Outer_volume_full_phase_2 = Outer_volume_histograms.iloc[i, Partical_peak_2:].sum()
 
-            voxels_bg_1 = Outer_volume_histograms.iloc[i, Background_peak_pos:Partical_peak_1]
-            weights_bg_1 = np.linspace(0, 1, max(1, Partical_peak_1+1 - Background_peak_pos))[:len(voxels_bg_1)]
+            voxels_bg_1 = Outer_volume_histograms.iloc[i, Background_peak_pos+1:Partical_peak_1]
+            weights_bg_1 = np.linspace(0, 1, max(1, Partical_peak_1 - Background_peak_pos+1))[1:len(voxels_bg_1)+1]
+            
             Quantification_Outer_phase_1_array = np.sum(voxels_bg_1 * weights_bg_1)
 
-            voxels_bg_2 = Outer_volume_histograms.iloc[i, Background_peak_pos:Partical_peak_2]
-            weights_bg_2 = np.linspace(0, 1, max(1, Partical_peak_2+1 - Background_peak_pos))[:len(voxels_bg_2)]
+            voxels_bg_2 = Outer_volume_histograms.iloc[i, Background_peak_pos+1:Partical_peak_2]
+            weights_bg_2 = np.linspace(0, 1, max(1, Partical_peak_2 - Background_peak_pos+1))[1:len(voxels_bg_2)+1]
             Quantification_Outer_phase_2_array = np.sum(voxels_bg_2 * weights_bg_2) - np.sum((voxels_bg_2 * weights_bg_2)[:Partical_peak_1 - Background_peak_pos])
 
             PVE_adjusted_volume = Outer_volume_full_phase_2 + Quantification_Outer_phase_1_array + Quantification_Outer_phase_2_array
