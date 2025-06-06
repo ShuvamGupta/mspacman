@@ -1938,18 +1938,18 @@ def Liberated_Particles(Peaks, Bulk_histograms, Surface_mesh_histogram):
             Index_1_phase.append([index])
 
             # Core quantification
-            Sum_phase = row.iloc[Partical_peak:65535].sum()
+            Sum_phase = row.iloc[Partical_peak:].sum()
             Quantification_1_phases_append.append([Sum_phase])
 
             # Outer phase quantification
             voxels = row.iloc[Background_peak_pos:Partical_peak]
-            weights = np.linspace(0, 1, Partical_peak - Background_peak_pos)
+            weights = np.linspace(0, 1, Partical_peak+1 - Background_peak_pos)
             weights = weights[:len(voxels)]
             Quantification_Outer = (voxels * weights).sum()
             Quantification_Outer_phase_1_append.append([Quantification_Outer])
 
             # Surface quantification
-            Surface_quant = Surface_mesh_histogram.iloc[i, Background_peak_pos:65535].sum()
+            Surface_quant = Surface_mesh_histogram.iloc[i, Background_peak_pos:].sum()
             Surface_quantification_append.append([Surface_quant])
 
     # Build DataFrames from collected results
@@ -2042,7 +2042,7 @@ def Binary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_volu
                 Gradient_ratio = Gradient_threshold
 
             # Inner core quantification from histogram
-            Sum_phase_1 = Inner_volume_histograms.iloc[i, Background_peak_pos:Partical_peak_1].sum()
+            Sum_phase_1 = Inner_volume_histograms.iloc[i, Background_peak_pos+1:Partical_peak_1+1].sum()
             Sum_phase_2 = Inner_volume_histograms.iloc[i, Partical_peak_2:].sum()
             
 
@@ -2050,9 +2050,9 @@ def Binary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_volu
             Peaks_1_phase.append([Partical_peak_1])
             Peaks_2_phase.append([Partical_peak_2])
 
-            No_of_voxels = Inner_volume_histograms.iloc[i, Partical_peak_1:Partical_peak_2].values
-            multiples = np.linspace(0, 1, max(1, Partical_peak_2 - Partical_peak_1))
-            multiples_towards_1 = multiples[:len(No_of_voxels)]
+            No_of_voxels = Inner_volume_histograms.iloc[i, Partical_peak_1+1:Partical_peak_2].values
+            multiples = np.linspace(0, 1, max(1, Partical_peak_2+1 - Partical_peak_1))
+            multiples_towards_1 = multiples[1:len(No_of_voxels)+1]
             multiples_towards_2 = multiples_towards_1[::-1]
 
             out_of_peak_volume_1 = np.sum(No_of_voxels * multiples_towards_2)
@@ -2065,11 +2065,11 @@ def Binary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_volu
             Outer_volume_full_phase_2 = Outer_volume_histograms.iloc[i, Partical_peak_2:].sum()
 
             voxels_bg_1 = Outer_volume_histograms.iloc[i, Background_peak_pos:Partical_peak_1]
-            weights_bg_1 = np.linspace(0, 1, max(1, Partical_peak_1 - Background_peak_pos))[:len(voxels_bg_1)]
+            weights_bg_1 = np.linspace(0, 1, max(1, Partical_peak_1+1 - Background_peak_pos))[:len(voxels_bg_1)]
             Quantification_Outer_phase_1_array = np.sum(voxels_bg_1 * weights_bg_1)
 
             voxels_bg_2 = Outer_volume_histograms.iloc[i, Background_peak_pos:Partical_peak_2]
-            weights_bg_2 = np.linspace(0, 1, max(1, Partical_peak_2 - Background_peak_pos))[:len(voxels_bg_2)]
+            weights_bg_2 = np.linspace(0, 1, max(1, Partical_peak_2+1 - Background_peak_pos))[:len(voxels_bg_2)]
             Quantification_Outer_phase_2_array = np.sum(voxels_bg_2 * weights_bg_2) - np.sum((voxels_bg_2 * weights_bg_2)[:Partical_peak_1 - Background_peak_pos])
 
             PVE_adjusted_volume = Outer_volume_full_phase_2 + Quantification_Outer_phase_1_array + Quantification_Outer_phase_2_array
@@ -2083,10 +2083,10 @@ def Binary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_volu
                 Phase_limit = 65535
 
             surface_row = Surface_mesh_histogram.iloc[i]
-            Surface_ratio = surface_row[Background_peak_pos:int(Gradient_ratio * Phase_limit)].sum() / surface_row[Background_peak_pos:].sum()
+            Surface_ratio = surface_row[Background_peak_pos+1:int(Gradient_ratio * Phase_limit)].sum() / surface_row[Background_peak_pos+1:].sum()
 
-            Phase_1_surface_volume = surface_row[Background_peak_pos:65535].sum() * Surface_ratio
-            Phase_2_surface_volume = surface_row[Background_peak_pos:65535].sum() - Phase_1_surface_volume
+            Phase_1_surface_volume = surface_row[Background_peak_pos+1:].sum() * Surface_ratio
+            Phase_2_surface_volume = surface_row[Background_peak_pos+1:].sum() - Phase_1_surface_volume
 
             Surface_volume_phase_1_append.append([Phase_1_surface_volume])
             Surface_volume_phase_2_append.append([Phase_2_surface_volume])
@@ -2213,7 +2213,7 @@ def Ternary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_vol
             Partical_peak_3 = int(float(Partical_peak_3))
         
             #Taking the sum of ith row from phase 1 minimum threshold greyscale value till Phase1_max_limit
-            Sum_phase_1 = Inner_volume_histograms.iloc[i,Background_peak_pos:int((Partical_peak_1+Partical_peak_2)/2)].sum()
+            Sum_phase_1 = Inner_volume_histograms.iloc[i,Background_peak_pos+1:int((Partical_peak_1+Partical_peak_2)/2)].sum()
         
 
             #Taking the sum of ith row from phase 1 minimum threshold greyscale value till Phase1_max_limit
@@ -2221,7 +2221,7 @@ def Ternary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_vol
             
         
             #Taking the sum of ith row from phase 1 minimum threshold greyscale value till Phase1_max_limit
-            Sum_phase_3 = Inner_volume_histograms.iloc[i,int((Partical_peak_2+Partical_peak_3)/2):65535].sum()
+            Sum_phase_3 = Inner_volume_histograms.iloc[i,int((Partical_peak_2+Partical_peak_3)/2):].sum()
         
         
             Index_3_phase.append([index])
@@ -2245,7 +2245,7 @@ def Ternary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_vol
 
                 
             
-            Phase_1_surface_volume = Surface_mesh_histogram.iloc[i,Background_peak_pos:int(Phase_limit_1*Gradient_ratio)].sum()
+            Phase_1_surface_volume = Surface_mesh_histogram.iloc[i,Background_peak_pos+1:int(Phase_limit_1*Gradient_ratio)].sum()
             Phase_2_surface_volume = Surface_mesh_histogram.iloc[i,int(Phase_limit_1*Gradient_ratio):int(Phase_limit_2*Gradient_ratio)].sum()
             Phase_3_surface_volume = Surface_mesh_histogram.iloc[i,int(Phase_limit_2*Gradient_ratio):].sum()
             
@@ -2261,16 +2261,17 @@ def Ternary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_vol
             
             def calculate_phase_quantification_array(particle_peak_pos):
                 # Calculate the multiples array
-                multiples_towards_background = np.arange(0, 1, 1 / ((particle_peak_pos - 1) - Background_peak_pos))
+                multiples_towards_background = np.linspace(0, 1, (particle_peak_pos + 1) - Background_peak_pos)
                 multiples_towards_background = np.array(multiples_towards_background)
+                multiples_towards_background = multiples_towards_background[1:]
             
                 # Select No_of_voxels_towards_background based on length comparison
-                if len(Outer_volume_histograms.iloc[i,Background_peak_pos:particle_peak_pos]) == len(multiples_towards_background):
-                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos:particle_peak_pos]
-                elif len(Outer_volume_histograms.iloc[i,Background_peak_pos:particle_peak_pos]) > len(multiples_towards_background):
-                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos:particle_peak_pos-1]
+                if len(Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos+1]) == len(multiples_towards_background):
+                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos+1]
+                elif len(Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos+1]) > len(multiples_towards_background):
+                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos]
                 else:
-                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos:particle_peak_pos+1]
+                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos+2]
                 # Calculate and return the quantification result
                 quantification_outer_phase = no_of_voxels_towards_background * multiples_towards_background
                 return quantification_outer_phase
@@ -2278,7 +2279,7 @@ def Ternary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_vol
             Quantification_Outer_phase_2_array = calculate_phase_quantification_array(Partical_peak_2)
             Quantification_Outer_phase_2_array = Quantification_Outer_phase_2_array[Partical_peak_1-Background_peak_pos:]
             Quantification_Outer_phase_3_array = calculate_phase_quantification_array(Partical_peak_3)
-            Quantification_Outer_phase_3_array = Quantification_Outer_phase_3_array[Partical_peak_2-Background_peak_pos:]
+            Quantification_Outer_phase_3_array = Quantification_Outer_phase_3_array[Partical_peak_2-Background_peak_pos: Partical_peak_3 - Background_peak_pos]
             
             PVE_adjusted_volume = Outer_volume_full_phase_3 + Quantification_Outer_phase_1_array.sum()+Quantification_Outer_phase_2_array.sum()+Quantification_Outer_phase_3_array.sum()
             
@@ -2462,7 +2463,7 @@ def Quaternary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_
                 
 
             
-            Phase_1_surface_volume = Surface_mesh_histogram.iloc[i,Background_peak_pos:int(Phase_limit_1*Gradient_ratio)].sum()
+            Phase_1_surface_volume = Surface_mesh_histogram.iloc[i,Background_peak_pos+1:int(Phase_limit_1*Gradient_ratio)].sum()
             Phase_2_surface_volume = Surface_mesh_histogram.iloc[i,int(Phase_limit_1*Gradient_ratio):int(Phase_limit_2*Gradient_ratio)].sum()
             Phase_3_surface_volume = Surface_mesh_histogram.iloc[i,int(Phase_limit_2*Gradient_ratio):int(Phase_limit_3*Gradient_ratio)].sum()
             Phase_4_surface_volume = Surface_mesh_histogram.iloc[i,int(Phase_limit_3*Gradient_ratio):].sum()
@@ -2479,19 +2480,20 @@ def Quaternary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_
             
             
             Outer_volume_full_phase_4 = Outer_volume_histograms.iloc[i,Partical_peak_4:].sum()
-            
+
             def calculate_phase_quantification_array(particle_peak_pos):
                 # Calculate the multiples array
-                multiples_towards_background = np.arange(0, 1, 1 / ((particle_peak_pos - 1) - Background_peak_pos))
+                multiples_towards_background = np.linspace(0, 1, (particle_peak_pos + 1) - Background_peak_pos)
                 multiples_towards_background = np.array(multiples_towards_background)
+                multiples_towards_background = multiples_towards_background[1:]
             
                 # Select No_of_voxels_towards_background based on length comparison
-                if len(Outer_volume_histograms.iloc[i,Background_peak_pos:particle_peak_pos]) == len(multiples_towards_background):
-                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos:particle_peak_pos]
-                elif len(Outer_volume_histograms.iloc[i,Background_peak_pos:particle_peak_pos]) > len(multiples_towards_background):
-                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos:particle_peak_pos-1]
+                if len(Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos+1]) == len(multiples_towards_background):
+                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos+1]
+                elif len(Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos+1]) > len(multiples_towards_background):
+                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos]
                 else:
-                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos:particle_peak_pos+1]
+                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos+2]
                 # Calculate and return the quantification result
                 quantification_outer_phase = no_of_voxels_towards_background * multiples_towards_background
                 return quantification_outer_phase
@@ -2501,7 +2503,7 @@ def Quaternary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_
             Quantification_Outer_phase_3_array = calculate_phase_quantification_array(Partical_peak_3)
             Quantification_Outer_phase_3_array = Quantification_Outer_phase_3_array[Partical_peak_2-Background_peak_pos:]
             Quantification_Outer_phase_4_array = calculate_phase_quantification_array(Partical_peak_4)
-            Quantification_Outer_phase_4_array = Quantification_Outer_phase_4_array[Partical_peak_3-Background_peak_pos:]
+            Quantification_Outer_phase_4_array = Quantification_Outer_phase_4_array[Partical_peak_3-Background_peak_pos: Partical_peak_4 - Background_peak_pos]
             
             PVE_adjusted_volume = (Outer_volume_full_phase_4 + Quantification_Outer_phase_1_array.sum()+Quantification_Outer_phase_2_array.sum()
                                    +Quantification_Outer_phase_3_array.sum()+Quantification_Outer_phase_4_array.sum())
@@ -2715,7 +2717,7 @@ def Quinary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_vol
             Phase_limit_4 = get_phase_limit(Partical_peak_4, phase_thresholds)
                 
             
-            Phase_1_surface_volume = Surface_mesh_histogram.iloc[i,Background_peak_pos:int(Phase_limit_1*Gradient_ratio)].sum()
+            Phase_1_surface_volume = Surface_mesh_histogram.iloc[i,Background_peak_pos+1:int(Phase_limit_1*Gradient_ratio)].sum()
             Phase_2_surface_volume = Surface_mesh_histogram.iloc[i,int(Phase_limit_1*Gradient_ratio):int(Phase_limit_2*Gradient_ratio)].sum()
             Phase_3_surface_volume = Surface_mesh_histogram.iloc[i,int(Phase_limit_2*Gradient_ratio):int(Phase_limit_3*Gradient_ratio)].sum()
             Phase_4_surface_volume = Surface_mesh_histogram.iloc[i,int(Phase_limit_3*Gradient_ratio):int(Phase_limit_4*Gradient_ratio)].sum()
@@ -2738,16 +2740,17 @@ def Quinary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_vol
             
             def calculate_phase_quantification_array(particle_peak_pos):
                 # Calculate the multiples array
-                multiples_towards_background = np.arange(0, 1, 1 / ((particle_peak_pos - 1) - Background_peak_pos))
+                multiples_towards_background = np.linspace(0, 1, (particle_peak_pos + 1) - Background_peak_pos)
                 multiples_towards_background = np.array(multiples_towards_background)
+                multiples_towards_background = multiples_towards_background[1:]
             
                 # Select No_of_voxels_towards_background based on length comparison
-                if len(Outer_volume_histograms.iloc[i,Background_peak_pos:particle_peak_pos]) == len(multiples_towards_background):
-                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos:particle_peak_pos]
-                elif len(Outer_volume_histograms.iloc[i,Background_peak_pos:particle_peak_pos]) > len(multiples_towards_background):
-                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos:particle_peak_pos-1]
+                if len(Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos+1]) == len(multiples_towards_background):
+                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos+1]
+                elif len(Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos+1]) > len(multiples_towards_background):
+                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos]
                 else:
-                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos:particle_peak_pos+1]
+                    no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos+2]
                 # Calculate and return the quantification result
                 quantification_outer_phase = no_of_voxels_towards_background * multiples_towards_background
                 return quantification_outer_phase
@@ -2759,7 +2762,7 @@ def Quinary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_vol
             Quantification_Outer_phase_4_array = calculate_phase_quantification_array(Partical_peak_4)
             Quantification_Outer_phase_4_array = Quantification_Outer_phase_4_array[Partical_peak_3-Background_peak_pos:]
             Quantification_Outer_phase_5_array = calculate_phase_quantification_array(Partical_peak_5)
-            Quantification_Outer_phase_5_array = Quantification_Outer_phase_5_array[Partical_peak_4-Background_peak_pos:]
+            Quantification_Outer_phase_5_array = Quantification_Outer_phase_5_array[Partical_peak_4-Background_peak_pos:: Partical_peak_5 - Background_peak_pos]
             
             PVE_adjusted_volume = (Outer_volume_full_phase_5 + Quantification_Outer_phase_1_array.sum()+Quantification_Outer_phase_2_array.sum()
                                    +Quantification_Outer_phase_3_array.sum()+Quantification_Outer_phase_4_array.sum()+
