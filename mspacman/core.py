@@ -400,6 +400,17 @@ def calculate_properties(labelled_image, ct_image, Properties, voxel_size, step_
     # Feret Diameters 
     if feret_requested:
 
+        def fibonacci_sphere_samples(n=64800):  # 180x360 grid for ~0.5° spacing
+            """Generate uniformly distributed directions on a sphere with ~0.5° spacing."""
+            indices = np.arange(n, dtype=float) + 0.5
+            phi = np.arccos(1 - 2 * indices / n)  # Polar angle (0 to π)
+            theta = np.pi * (1 + 5**0.5) * indices  # Azimuthal angle (golden spiral)
+            return np.stack([
+                np.sin(phi) * np.cos(theta),
+                np.sin(phi) * np.sin(theta),
+                np.cos(phi)
+            ], axis=1)
+
         def exact_feret_diameters(coords):
             """Compute min/max Feret diameters with guaranteed ±0.5° accuracy."""
             if len(coords) < 2:
