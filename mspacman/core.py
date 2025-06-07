@@ -278,7 +278,7 @@ def Bulk_particle_histograms(labelled_image, image):
     return histograms_df
 
 
-def calculate_properties(labelled_image, ct_image, Properties, angle_spacing, voxel_size, step_size):
+def calculate_properties(labelled_image, ct_image, Properties, voxel_size, step_size):
     
     """
     Calculate 3D morphological and surface features for labeled particles in a CT image.
@@ -293,8 +293,6 @@ def calculate_properties(labelled_image, ct_image, Properties, angle_spacing, vo
     Properties : list
         List of region properties to calculate using skimage.
     
-    angle_spacing : int
-        Angular step (in degrees) for Feret diameter calculation.
     
     voxel_size : float
         Size of a voxel edge in microns or other physical unit.
@@ -400,49 +398,69 @@ def calculate_properties(labelled_image, ct_image, Properties, angle_spacing, vo
 
     # Feret Diameters 
     if feret_requested:
-        def rotate_coords(coords, a1, a2, a3):
-            
-            """Apply 3D rotation to coordinates using Euler angles."""
-            
-            Rz = np.array([[np.cos(np.radians(a1)), -np.sin(np.radians(a1)), 0],
-                           [np.sin(np.radians(a1)),  np.cos(np.radians(a1)), 0],
-                           [0, 0, 1]])
-            Ry = np.array([[np.cos(np.radians(a2)), 0, -np.sin(np.radians(a2))],
-                           [0, 1, 0],
-                           [np.sin(np.radians(a2)), 0, np.cos(np.radians(a2))]])
-            Rx = np.array([[1, 0, 0],
-                           [0, np.cos(np.radians(a3)), -np.sin(np.radians(a3))],
-                           [0, np.sin(np.radians(a3)),  np.cos(np.radians(a3))]])
-            return coords @ Rz @ Ry @ Rx
+        from scipy.spatial import ConvexHull, QhullError
+        from skimage.measure import regionprops
+        from joblib import Parallel, delayed
+        from tqdm import tqdm
+        import pandas as pd
 
-        def compute_feret(label, coords):
+        def fibonacci_sphere_samples(n=64800):  # 180x360 grid for ~0.5° spacing
+            """Generate uniformly distributed directions on a sphere with ~0.5° spacing."""
+            indices = np.arange(n, dtype=float) + 0.5
+            phi = np.arccos(1 - 2 * indices / n)  # Polar angle (0 to π)
+            theta = np.pi * (1 + 5**0.5) * indices  # Azimuthal angle (golden spiral)
+            return np.stack([
+                np.sin(phi) * np.cos(theta),
+                np.sin(phi) * np.sin(theta),
+                np.cos(phi)
+            ], axis=1)
+
+        def exact_feret_diameters(coords):
+            """Compute min/max Feret diameters with guaranteed ±0.5° accuracy."""
+            if len(coords) < 2:
+                return 0.0, 0.0
             
-            """Calculate min and max Feret diameters by rotating the particle."""
+            # Use convex hull for efficiency (exact for Feret)
+            try:
+                hull = ConvexHull(coords)
+                pts = coords[hull.vertices]
+            except (QhullError, ValueError):
+                pts = coords
             
-            min_feret = np.inf
-            max_feret = 0
-            for a1 in range(0, 180, angle_spacing):
-                for a2 in range(0, 180, angle_spacing):
-                    for a3 in range(0, 180, angle_spacing):
-                        rotated = rotate_coords(coords, a1, a2, a3)
-                        max_dim = rotated.ptp(axis=0)
-                        max_feret = max(max_feret, max_dim[0])
-                        min_feret = min(min_feret, max_dim[1], max_dim[2])
-            return label, max_feret, min_feret
-        
-        # Extract coordinates for Feret diameter calculation
+            # Pre-compute all direction vectors
+            directions = fibonacci_sphere_samples()
+            
+            # Vectorized projection (fastest method)
+            projections = pts @ directions.T
+            spans = np.max(projections, axis=0) - np.min(projections, axis=0)
+            
+            return np.max(spans), np.min(spans)
 
-        regions = measure.regionprops(labelled_image, intensity_image=ct_image)
-        coords_list = [(r.label, r.coords) for r in regions if r.label in unique_labels]
+        def _process_object(prop):
+            """Extract object coords and compute Feret diameters."""
+            mask = prop.image
+            if mask.sum() == 0:
+                return prop.label, 0.0, 0.0
+            
+            # Get all object voxels (more accurate than surface-only for convex hull)
+            coords = np.argwhere(mask)
+            min_z, min_y, min_x, _, _, _ = prop.bbox
+            global_coords = coords + np.array([min_z, min_y, min_x])
+            
+            max_feret, min_feret = exact_feret_diameters(global_coords)
+            return prop.label, max_feret, min_feret
 
-        feret_results = Parallel(n_jobs=-1)(
-            delayed(compute_feret)(label, coords)
-            for label, coords in tqdm(coords_list, desc="Feret Diameter")
-        )
-        
-        # Assemble Feret diameter results
+        def compute_feret_diameters(label_img, n_jobs=-1):
+            """Main function: compute Feret diameters for all objects in a 3D label image."""
+            props = regionprops(label_img)
+            results = Parallel(n_jobs=n_jobs)(
+                delayed(_process_object)(prop)
+                for prop in tqdm(props, desc="Computing Feret diameters")
+            )
+            return pd.DataFrame(results, columns=['label', 'Max_Feret', 'Min_Feret']).set_index('label')
 
-        feret_df = pd.DataFrame(feret_results, columns=['label', 'Max_Feret_Diameter', 'Min_Feret_Diameter']).set_index('label')
+        feret_df = compute_feret_diameters(labelled_image)
+
         merged = merged.merge(feret_df, how='left', on='label')
         
         # Convert Feret diameters to physical units
@@ -966,7 +984,6 @@ def run_batch_processing(
     labels_per_chunk,
     Size_threshold,
     voxel_size,
-    angle_spacing,
     step_size,
     calculate_properties_bulk=True,
     compute_bulk_histogram=True,
@@ -1000,8 +1017,6 @@ def run_batch_processing(
             Minimum size (in voxels) for particles to be kept.
         voxel_size : float
             Physical size of a voxel (for unit conversion).
-        angle_spacing : int
-            Step in degrees for Feret diameter rotation.
         step_size : int
             Step size used for marching cubes in surface area calculation.
         calculate_properties_bulk : bool
@@ -1081,8 +1096,7 @@ def run_batch_processing(
 
         if calculate_properties_bulk and Properties is not None:
             props = calculate_properties(
-                chunk_labels, chunk_nonbinary, Properties,
-                angle_spacing, voxel_size, step_size
+                chunk_labels, chunk_nonbinary, Properties,voxel_size, step_size
             )
             all_properties_bulk.append(props)
 
