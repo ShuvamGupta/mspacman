@@ -2064,7 +2064,7 @@ def Binary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_volu
 
             Outer_volume_full_phase_2 = Outer_volume_histograms.iloc[i, Partical_peak_2:].sum()
 
-            voxels_bg_1 = Outer_volume_histograms.iloc[i, Background_peak_pos+1:Partical_peak_1]
+            voxels_bg_1 = Outer_volume_histograms.iloc[i, Background_peak_pos+1:Partical_peak_1+1]
             weights_bg_1 = np.linspace(0, 1, max(1, Partical_peak_1 - Background_peak_pos+1))[1:len(voxels_bg_1)+1]
             
             Quantification_Outer_phase_1_array = np.sum(voxels_bg_1 * weights_bg_1)
@@ -2261,7 +2261,7 @@ def Ternary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_vol
             Outer_volume_full_phase_3 = Outer_volume_histograms.iloc[i,Partical_peak_3:].sum()
             
             def calculate_phase_quantification_array(particle_peak_pos):
-                no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos]
+                no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos+1]
                 # Calculate the multiples array
                 multiples_towards_background = np.linspace(0, 1, (particle_peak_pos) - Background_peak_pos+1)
                 multiples_towards_background = multiples_towards_background[1:len(no_of_voxels_towards_background)+1]
@@ -2272,7 +2272,7 @@ def Ternary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_vol
             Quantification_Outer_phase_2_array = calculate_phase_quantification_array(Partical_peak_2)
             Quantification_Outer_phase_2_array = Quantification_Outer_phase_2_array[Partical_peak_1-Background_peak_pos:]
             Quantification_Outer_phase_3_array = calculate_phase_quantification_array(Partical_peak_3)
-            Quantification_Outer_phase_3_array = Quantification_Outer_phase_3_array[Partical_peak_2-Background_peak_pos: Partical_peak_3 - Background_peak_pos]
+            Quantification_Outer_phase_3_array = Quantification_Outer_phase_3_array[Partical_peak_2-Background_peak_pos: Partical_peak_3 - Background_peak_pos-1]
             
             PVE_adjusted_volume = Outer_volume_full_phase_3 + Quantification_Outer_phase_1_array.sum()+Quantification_Outer_phase_2_array.sum()+Quantification_Outer_phase_3_array.sum()
             
@@ -2475,7 +2475,7 @@ def Quaternary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_
             Outer_volume_full_phase_4 = Outer_volume_histograms.iloc[i,Partical_peak_4:].sum()
 
             def calculate_phase_quantification_array(particle_peak_pos):
-                no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos]
+                no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos+1]
                 # Calculate the multiples array
                 multiples_towards_background = np.linspace(0, 1, (particle_peak_pos) - Background_peak_pos+1)
                 multiples_towards_background = multiples_towards_background[1:len(no_of_voxels_towards_background)+1]
@@ -2489,7 +2489,7 @@ def Quaternary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_
             Quantification_Outer_phase_3_array = calculate_phase_quantification_array(Partical_peak_3)
             Quantification_Outer_phase_3_array = Quantification_Outer_phase_3_array[Partical_peak_2-Background_peak_pos:]
             Quantification_Outer_phase_4_array = calculate_phase_quantification_array(Partical_peak_4)
-            Quantification_Outer_phase_4_array = Quantification_Outer_phase_4_array[Partical_peak_3-Background_peak_pos: Partical_peak_4 - Background_peak_pos]
+            Quantification_Outer_phase_4_array = Quantification_Outer_phase_4_array[Partical_peak_3-Background_peak_pos: Partical_peak_4 - Background_peak_pos-1]
             
             PVE_adjusted_volume = (Outer_volume_full_phase_4 + Quantification_Outer_phase_1_array.sum()+Quantification_Outer_phase_2_array.sum()
                                    +Quantification_Outer_phase_3_array.sum()+Quantification_Outer_phase_4_array.sum())
@@ -2727,8 +2727,8 @@ def Quinary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_vol
 
             Outer_volume_full_phase_4 = Outer_volume_histograms.iloc[i,Partical_peak_4:].sum()
 
-            def calculate_phase_quantification_array(particle_peak_pos):
-                no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos]
+             def calculate_phase_quantification_array(particle_peak_pos):
+                no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos+1]
                 # Calculate the multiples array
                 multiples_towards_background = np.linspace(0, 1, (particle_peak_pos) - Background_peak_pos+1)
                 multiples_towards_background = multiples_towards_background[1:len(no_of_voxels_towards_background)+1]
@@ -2736,16 +2736,6 @@ def Quinary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_vol
                 quantification_outer_phase = no_of_voxels_towards_background * multiples_towards_background
                 return quantification_outer_phase
 
-            Quantification_Outer_phase_1_array = calculate_phase_quantification_array(Partical_peak_1)
-            Quantification_Outer_phase_2_array = calculate_phase_quantification_array(Partical_peak_2)
-            Quantification_Outer_phase_2_array = Quantification_Outer_phase_2_array[Partical_peak_1-Background_peak_pos:]
-            Quantification_Outer_phase_3_array = calculate_phase_quantification_array(Partical_peak_3)
-            Quantification_Outer_phase_3_array = Quantification_Outer_phase_3_array[Partical_peak_2-Background_peak_pos:]
-            Quantification_Outer_phase_4_array = calculate_phase_quantification_array(Partical_peak_4)
-            Quantification_Outer_phase_4_array = Quantification_Outer_phase_4_array[Partical_peak_3-Background_peak_pos: Partical_peak_4 - Background_peak_pos]
-            
-            PVE_adjusted_volume = (Outer_volume_full_phase_4 + Quantification_Outer_phase_1_array.sum()+Quantification_Outer_phase_2_array.sum()
-                                   +Quantification_Outer_phase_3_array.sum()+Quantification_Outer_phase_4_array.sum())
             
             Quantification_Outer_phase_1_array = calculate_phase_quantification_array(Partical_peak_1)
             Quantification_Outer_phase_2_array = calculate_phase_quantification_array(Partical_peak_2)
@@ -2755,7 +2745,7 @@ def Quinary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_vol
             Quantification_Outer_phase_4_array = calculate_phase_quantification_array(Partical_peak_4)
             Quantification_Outer_phase_4_array = Quantification_Outer_phase_4_array[Partical_peak_3-Background_peak_pos:]
             Quantification_Outer_phase_5_array = calculate_phase_quantification_array(Partical_peak_5)
-            Quantification_Outer_phase_5_array = Quantification_Outer_phase_5_array[Partical_peak_4-Background_peak_pos:: Partical_peak_5 - Background_peak_pos]
+            Quantification_Outer_phase_5_array = Quantification_Outer_phase_5_array[Partical_peak_4-Background_peak_pos: Partical_peak_5 - Background_peak_pos-1]
             
             PVE_adjusted_volume = (Outer_volume_full_phase_5 + Quantification_Outer_phase_1_array.sum()+Quantification_Outer_phase_2_array.sum()
                                    +Quantification_Outer_phase_3_array.sum()+Quantification_Outer_phase_4_array.sum()+
