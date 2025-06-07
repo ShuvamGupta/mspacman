@@ -15,6 +15,7 @@ from skimage.filters import sobel
 import re
 from pykuwahara import kuwahara
 from scipy.ndimage import gaussian_filter
+from scipy.spatial import ConvexHull, QhullError
 
 
 
@@ -398,22 +399,6 @@ def calculate_properties(labelled_image, ct_image, Properties, voxel_size, step_
 
     # Feret Diameters 
     if feret_requested:
-        from scipy.spatial import ConvexHull, QhullError
-        from skimage.measure import regionprops
-        from joblib import Parallel, delayed
-        from tqdm import tqdm
-        import pandas as pd
-
-        def fibonacci_sphere_samples(n=64800):  # 180x360 grid for ~0.5° spacing
-            """Generate uniformly distributed directions on a sphere with ~0.5° spacing."""
-            indices = np.arange(n, dtype=float) + 0.5
-            phi = np.arccos(1 - 2 * indices / n)  # Polar angle (0 to π)
-            theta = np.pi * (1 + 5**0.5) * indices  # Azimuthal angle (golden spiral)
-            return np.stack([
-                np.sin(phi) * np.cos(theta),
-                np.sin(phi) * np.sin(theta),
-                np.cos(phi)
-            ], axis=1)
 
         def exact_feret_diameters(coords):
             """Compute min/max Feret diameters with guaranteed ±0.5° accuracy."""
@@ -459,7 +444,11 @@ def calculate_properties(labelled_image, ct_image, Properties, voxel_size, step_
             )
             return pd.DataFrame(results, columns=['label', 'Max_Feret', 'Min_Feret']).set_index('label')
 
-        feret_df = compute_feret_diameters(labelled_image)
+        # Usage
+        feret_df = compute_feret_diameters(Labels)
+
+    # Usage
+    feret_df1 = compute_feret_diameters(Labels)
 
         merged = merged.merge(feret_df, how='left', on='label')
         
