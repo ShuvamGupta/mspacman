@@ -54,10 +54,6 @@ ct_image : ndarray
 Properties : dict
     Dictionary where computed properties will be saved.
 
-angle_spacing : float
-    Angular interval (in degrees) for computing Feret diameters.
-    Smaller values give more accurate results but increase computation time (∝ angle³).
-
 voxel_size : float
     Real-world size of each voxel (e.g., in micrometers or millimeters).
     Used to convert volume and surface area from voxel units to real units.
@@ -73,7 +69,7 @@ Notes
 - Smaller `angle_spacing` and `step_size` improve accuracy but increase runtime.
 """
 
-Properties = mspacman.core.calculate_properties(Labels, Non_binary, Properties, 25,5,1)
+Properties = mspacman.core.calculate_properties(Labels, Non_binary, Properties, 5,1)
 print(Properties)
 
 
@@ -240,10 +236,6 @@ voxel_size : float
     The real-world size of each voxel (e.g., 5 means 5 µm if units are in microns).
     Used to convert raw voxel-based measurements to physical units.
 
-angle_spacing : float
-    Angular interval (in degrees) used for Feret diameter calculations.
-    Smaller values give more precise shape metrics but increase computation time by angle power of 3.
-
 step_size : float
     Resolution step for marching cubes surface mesh. Lower step size = smoother surface but higher computation time.
 
@@ -284,7 +276,6 @@ results = mspacman.core.run_batch_processing(
     labels_per_chunk=3000,
     Size_threshold=1000,
     voxel_size=5,
-    angle_spacing=10,
     step_size=1,
     calculate_properties_bulk=True,
     compute_bulk_histogram=True,
