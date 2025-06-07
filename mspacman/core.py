@@ -462,9 +462,9 @@ def calculate_properties(labelled_image, ct_image, Properties, voxel_size, step_
         
         # Convert Feret diameters to physical units
         
-        merged['Max_Feret_Diameter'] *= voxel_size
-        merged['Min_Feret_Diameter'] *= voxel_size
-        merged['Feret_ratio'] = merged['Min_Feret_Diameter'] / merged['Max_Feret_Diameter']
+        merged['Max_Feret'] *= voxel_size
+        merged['Min_Feret'] *= voxel_size
+        merged['Feret_ratio'] = merged['Min_Feret'] / merged['Max_Feret']
 
     # Extra ratio
     if 'Bounding_Box_Volume' in merged.columns and 'Volume' in merged.columns:
