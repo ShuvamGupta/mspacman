@@ -2727,7 +2727,7 @@ def Quinary_Particles(Peaks, Bulk_histograms, Inner_volume_histograms, Outer_vol
 
             Outer_volume_full_phase_4 = Outer_volume_histograms.iloc[i,Partical_peak_4:].sum()
 
-             def calculate_phase_quantification_array(particle_peak_pos):
+            def calculate_phase_quantification_array(particle_peak_pos):
                 no_of_voxels_towards_background = Outer_volume_histograms.iloc[i,Background_peak_pos+1:particle_peak_pos+1]
                 # Calculate the multiples array
                 multiples_towards_background = np.linspace(0, 1, (particle_peak_pos) - Background_peak_pos+1)
