@@ -447,9 +447,6 @@ def calculate_properties(labelled_image, ct_image, Properties, voxel_size, step_
         # Usage
         feret_df = compute_feret_diameters(Labels)
 
-    # Usage
-    feret_df1 = compute_feret_diameters(Labels)
-
         merged = merged.merge(feret_df, how='left', on='label')
         
         # Convert Feret diameters to physical units
