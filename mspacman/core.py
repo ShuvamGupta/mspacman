@@ -445,7 +445,7 @@ def calculate_properties(labelled_image, ct_image, Properties, voxel_size, step_
             return pd.DataFrame(results, columns=['label', 'Max_Feret', 'Min_Feret']).set_index('label')
 
         # Usage
-        feret_df = compute_feret_diameters(Labels)
+        feret_df = compute_feret_diameters(labelled_image)
 
         merged = merged.merge(feret_df, how='left', on='label')
         
