@@ -9,7 +9,7 @@ considering partial volume blur for advanced CT analyses.
 
 Install directly from GitLab using pip:
 
-pip install git+https://gitlab.com/ShuvamGupta1/mspacman.git
+pip install git+https://github.com/ShuvamGupta1/mspacman.git
 
 ## Example usage
 Refer mspacman.core_example_usage.py file
