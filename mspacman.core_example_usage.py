@@ -62,11 +62,6 @@ step_size : float
     Step size used in marching cubes algorithm to generate surface mesh.
     Smaller step sizes yield more accurate surface areas but require more computation.
 
-Notes
------
-- Feret diameters are calculated at multiple orientations.
-- Surface mesh is extracted using marching cubes.
-- Smaller `angle_spacing` and `step_size` improve accuracy but increase runtime.
 """
 
 Properties = mspacman.core.calculate_properties(Labels, Non_binary, Properties, 5,1)
