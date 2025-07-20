@@ -40,7 +40,7 @@ Properties = [
 
 
 """
-mspacman.core.calculate_properties(labelled_img, ct_img, props, angle_spacing, voxel_size, step_size)
+mspacman.core.calculate_properties(labelled_img, ct_img, props,  voxel_size, step_size)
 Calculates particle properties from a labeled 3D image and CT scan.
 
 Parameters
