@@ -72,6 +72,19 @@ Built on top of:
 
 -  joblib, tqdm – Parallel processing and progress bars
 
+mspacman has been tested with the following package versions. If you encounter issues with other versions, please report them so they can be addressed.
+{'numpy': '1.26.4',
+ 'scipy': '1.15.2',
+ 'pandas': '2.2.3',
+ 'matplotlib': '3.10.1',
+ 'tifffile': '2025.3.30',
+ 'skimage': '0.25.2',
+ 'napari': '0.4.19.post1',
+ 'anndata': '0.10.7',
+ 'pykuwahara': 'have single version',
+ 'joblib': '1.5.0',
+ 'tqdm': '4.67.1'}
+
 ## Acknowledge
 This project utilizes several open-source Python libraries, including NumPy, SciPy, Pandas, Matplotlib, 
 Napari, tifffile, scikit-image, joblib, anndata, tqdm, pykuwahara, and standard Python libraries 
@@ -88,4 +101,5 @@ Tomography of Materials and Structures, 7, 100050. https://doi.org/10.1016/j.tma
 You may also cite this GitLab repository as a secondary reference:
 Gupta, S. (2025). *MSPaCMAn* [Python Package]. GitLab. https://gitlab.com/ShuvamGupta1/mspacman
 Developed while affiliated with Helmholtz Institute Freiberg for Resource Technology, Germany.
+
 
