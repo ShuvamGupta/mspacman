@@ -27,7 +27,7 @@ import pandas as pd
 # https://figshare.com/articles/dataset/Kemi_850_m_CT_data_and_Particle_Labels/29836160
 #
 # Non_binary_path: directory containing the raw (non-binary) CT image slices
-# Labelled_path  : directory containing the corresponding labeled segmentation
+# Labelled_path : directory containing the corresponding labeled segmentation
 # -------------------------------------------------------------------------
 
 Non_binary_path = r"C:\Users\gupta46\Downloads\29836160"
@@ -157,10 +157,10 @@ print (Labels.shape)
 import napari
 viewer = napari.Viewer()
 
-# Add raw as grayscale
+# Add raw as a grayscale
 viewer.add_image(Non_binary, name='Raw CT', contrast_limits=[Non_binary.min(), Non_binary.max()])
 
-# Add labels as segmentation
+# Add labels as a segmentation
 viewer.add_labels(Labels, name='Labeled Particles')
 
 napari.run()
@@ -180,10 +180,10 @@ Usage:
     denoised = mspacman.core.tv_chambolle_3d(image, mask, weight, max_iter)
 
 Parameters:
-    image      : 3D CT image to be denoised (e.g., Non_binary)
-    mask       : Binary or labeled mask to restrict the denoising region (e.g., Labels)
-    weight     : Smoothing factor (typical range: 0.01–0.1). Higher values apply stronger smoothing.
-    max_iter   : Number of iterations to run the TV algorithm
+    image     : 3D CT image to be denoised (e.g., Non_binary)
+    mask      : Binary or labeled mask to restrict the denoising region (e.g., Labels)
+    weight    : Smoothing factor (typical range: 0.01–0.1). Higher values apply stronger smoothing.
+    max_iter  : Number of iterations to run the TV algorithm
 """
 
 denoised = mspacman.core.tv_chambolle_3d(Non_binary, Labels, 0.03, 100)
@@ -199,9 +199,9 @@ Usage:
     cleaned_labels = mspacman.core.sobel_cleanup(image, labels, threshold)
 
 Parameters:
-    image     : 3D denoised CT image (usually output from TV denoising)
-    labels    : Labeled 3D mask containing particle IDs
-    threshold : Gradient magnitude threshold. Voxels with Sobel edge values below this
+    image    : 3D denoised CT image (usually output from TV denoising)
+    labels   : Labeled 3D mask containing particle IDs
+    threshold: Gradient magnitude threshold. Voxels with Sobel edge values below this
                 are considered affected by partial volume and can be excluded or corrected.
 """
 
@@ -258,7 +258,7 @@ print (np.unique(Labels))
 
 # Delete small particles
 # mspacman.core.delete_small_particles(labelled_image, Size_threshold)
-# Size_threshold is the volume threshold of particle as number of voxels 
+# Size_threshold is the volume threshold of the particle as the number of voxels 
 
 Labels = mspacman.core.delete_small_particles(Labels, 500000)
 print (np.unique(Labels))
@@ -267,7 +267,7 @@ print (np.unique(Labels))
 
 
 
-# List the properties you want to extract as an array. The full list can be seen on skimage.regioprops
+# List the properties you want to extract as an array. The complete list can be seen on skimage.regioprops
 Properties = [
     'label', 'area', 'min_intensity', 'max_intensity', 'equivalent_diameter',
     'mean_intensity', 'bbox_area', 'filled_area',
@@ -382,7 +382,7 @@ Smoothed_histogram_batching = results.get("Smoothed_image_histogram")
 #
 # Output:
 #   - Prints "Unit test passed" if DataFrames match
-#   - Otherwise prints "Datasets are not same" with the reason
+#   - Otherwise prints "Datasets are not the same" with the reason
 # -------------------------------------------------------------------------
 def test_datasets_equal(df1, df2):
     try:
@@ -442,11 +442,11 @@ Properties : dict
     Dictionary where computed properties will be saved.
 
 voxel_size : float
-    Real-world size of each voxel (e.g., in micrometers or millimeters).
+    Real-world size of each voxel (e.g., in micrometres or millimetres).
     Used to convert volume and surface area from voxel units to real units.
 
 step_size : float
-    Step size used in marching cubes algorithm to generate surface mesh.
+    Step size used in the marching cubes algorithm to generate a surface mesh.
     Smaller step sizes yield more accurate surface areas but require more computation.
 
 """
@@ -504,15 +504,15 @@ Inner_histograms =  mspacman.core.inner_particle_histograms(Labels, Non_binary, 
 # Unit test for Inner_histograms dataframe
 test_datasets_equal(Inner_histograms, Inner_histograms_test)
 
-# Outer volme can simple be obtained by subtracting Inner volume histograms from Bulk histograms
+# Outer volume can simply be obtained by subtracting the Inner volume histograms from the Bulk histograms
 Outer_histograms = Bulk_histograms - Inner_histograms
 
 # Unit test for Outer_histograms dataframe
 test_datasets_equal(Outer_histograms, Outer_histograms_test)
 
-# Deleting the labels that are smaller than size threhold from Labels_cleaned
+# Deleting the labels that are smaller than the size threshold from Labels_cleaned
 Labels_cleaned = Labels_cleaned*(np.where(Labels >0,1,0))
-# Extracting histograms of smoothed image
+# Extracting histograms ofa  smoothed image
 Smoothed_histogram = mspacman.core.Bulk_particle_histograms(Labels_cleaned, kuwahara_denoised)
 # Unit test for Smoothed_histogram dataframe
 test_datasets_equal(Smoothed_histogram, Smoothed_histograms_test)
@@ -681,7 +681,7 @@ distance : int
 height_ratio : float
     Ratio to determine peak height threshold; used to ignore low peaks. Height ratio 10 means in a particular 
     histogram, peaks up to 10th of height of the peak having maximum height will be detected. Note that it keeps
-    on changing with the histrogram based on the peak having maximum height in the particle.
+    on changing with the histogram based on the peak having maximum height in the particle.
 Binning : int
     The binning factor used during histogram preparation (to scale positions).
 Voxel_size : float
@@ -855,7 +855,7 @@ Returns:
 Bootstrapping_error_bulk = mspacman.core.calculate_bootstrapping_error_bulk(Quantification,1000)
 print (Bootstrapping_error_bulk)
 
-# Calculates boot strapping errors for surface mineral compositions
+# Calculates bootstrapping errors for surface mineral compositions
 Bootstrapping_error_surface = mspacman.core.calculate_bootstrapping_error_surface(Quantification,1000)
 print (Bootstrapping_error_surface)
 
